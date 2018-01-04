@@ -1,0 +1,170 @@
+body {
+    position: fixed;
+    height: 100%;
+    overflow: hidden;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+}
+* {
+  outline: none;
+}
+
+.logo {
+  font-size: 50px;
+  padding-bottom: 40px;
+}
+
+.invite-link {
+  text-align: center;
+  padding-top: 10px;
+  font-size: 20px;
+}
+
+.menu-page {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.menu-page .btn {
+  margin-bottom: 20px;
+}
+
+.big-title {
+  text-align: center;
+}
+
+.simple-input {
+  display: block;
+  width: 100%;
+  max-height:  20px;
+  font-size: 16px;
+  padding: 10px;
+  border: 2px #000000 solid;
+  border-radius: 5px;
+}
+
+.buttons-area {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+}
+.buttons-area.padding {
+  padding-top: 20px;
+}
+
+.btn {
+  padding: 5px 6px;
+  border: 2px #000 solid;
+  background: #fff;
+  font-size: 17px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.btn.success {
+  color: #3be08b;
+  border-color: #3be08b;
+}
+.btn.big {
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.battle-page {
+  display: block;
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+}
+.sheet-row {
+  display: flex;
+}
+
+.sheet-item {
+  display: block;
+  width: 30px;
+  height: 30px;
+  border: 1px #707070 solid;
+  user-select: none;
+}
+.sheet-item.ec {
+  cursor: pointer;
+}
+.sheet-item.sc {
+  background: #56a0e0;
+}
+.sheet-item.ac {
+  background: #c5c5c5;
+}
+.sheet-item.mc {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #d8d8d8;
+}
+.sheet-item.mc::after {
+  content: "•";
+  color: #8f8f8f;
+}
+.sheet-item.dc {
+  background: #b12c1f;
+}
+
+.players-header {
+  padding: 10px 0;
+  display: flex;
+  justify-content: space-between;
+}
+
+.players-header .player-panel {
+  box-sizing: border-box;
+  width: 40%;
+}
+
+.players-header .player-panel.right {
+  text-align: right;
+}
+
+.players-header .player-panel strong{
+  font-size: 20px;
+}
+.players-header .player-panel strong.active {
+  color: #9f5c6d;
+  text-decoration: underline;
+}
+
+.players-header .player-panel .ships {
+  padding-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
+.players-header .player-panel.right .ships {
+  justify-content: flex-end;
+}
+
+.players-header .player-panel .ship {
+  margin: 4px 4px 4px 0;
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+.players-header .player-panel.right .ship {
+  margin: 4px 0 4px 4px;
+}
+
+.players-header .player-panel .ship span {
+  display: block;
+  width: 8px;
+  height: 8px;
+  background: #56a0e0;
+}
+
+.players-header .player-panel .ship.destroyed span {
+  background: #b12c1f;
+}
