@@ -1,5 +1,5 @@
 <template>
-  <div class="battle-page" ref="gamePage">
+  <div class="battle-page" ref="gamePage" v-if="userData != null">
     <template v-if="gameData.secondPlayer['username'] == null">
       <div class="invite-link">
         Invite your friend: <a v-bind:href="inviteLink">/game/{{gameId}}</a>
@@ -55,6 +55,9 @@
       ...mapState({
         gameStage: state => state.game.gameStage
       }),
+      'userData': {
+        get () { return this.$store.state.user.userData }
+      },
       'gameData': {
         get () { return this.$store.state.game }
       },
@@ -73,11 +76,13 @@
     },
     created () {
       this.gameId = this.$route.params['game_id']
-      this.tryJoinGame(this.gameId)
-      this.$socket.emit('JOIN_GAME', {
-        'game_id': this.gameId,
-        'user': this.$store.state.user.userData
-      })
+      if (this.userData) {
+        this.tryJoinGame(this.gameId)
+        this.$socket.emit('JOIN_GAME', {
+          'game_id': this.gameId,
+          'user': this.$store.state.user.userData
+        })
+      }
     }
   }
 </script>

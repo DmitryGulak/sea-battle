@@ -1,6 +1,7 @@
 import api from '../api.js'
 import Vue from 'vue'
 import Vuex from 'vuex'
+import EventBus from '../event-bus'
 import gameModule from './modules/moduleGame'
 import createLogger from 'vuex/dist/logger'
 Vue.use(Vuex)
@@ -21,13 +22,15 @@ const userModule = {
         'username': username
       }, (response) => {
         commit('watchUser', response.data)
+        EventBus.$emit('user-login', response.data)
       }, (error) => { console.log('error: ', error) })
     },
     loadUser ({commit}) {
       api.getUser(
-        (response) => {
-          commit('watchUser', response.data)
-        }, (error) => { console.log('error: ', error) })
+      (response) => {
+        commit('watchUser', response.data)
+        EventBus.$emit('user-login', response.data)
+      }, (error) => { console.log('error: ', error) })
     }
   }
 }

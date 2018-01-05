@@ -53,6 +53,7 @@ class SeaBattleGame():
     '''
     data = pickle.dumps(self.game_data)
     r.set(f'game_{self.game_id}', data)
+    r.expire(f'game_{self.game_id}', 1000)
     return True
 
   def get_secrets(self):
@@ -70,6 +71,7 @@ class SeaBattleGame():
     '''
     data = pickle.dumps(self.secret_data)
     r.set(f'game_secrets_{self.game_id}', data)
+    r.expire(f'game_secrets_{self.game_id}', 1000)
     return True
 
   def switch_player(self):
