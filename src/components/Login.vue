@@ -31,6 +31,7 @@
 <style>
   .auth-area {
     position: absolute;
+    padding: 0 20px;
     box-sizing: border-box;
     width: 100%;
     height: 100%;

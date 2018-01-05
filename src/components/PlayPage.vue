@@ -5,7 +5,7 @@
         <strong v-bind:class="{'active': gameData.turnBy == gameData.myTag}">{{myPlayer.username}}</strong>
         <div class="ships">
           <template v-for="ship in myPlayer.ships">
-            <div class="ship" v-bind:class="{'destroyed': ship['hp'] <= 0}">
+            <div class="ship" v-bind:class="{'destroyed': ship['destroyed'] == true}">
               <span v-for="cell in getShipSize(ship)"></span>
             </div>
           </template>
@@ -15,20 +15,20 @@
         <strong v-bind:class="{'active': gameData.turnBy != gameData.myTag}">{{enemyPlayer.username}}</strong>
         <div class="ships">
           <template v-for="ship in enemyPlayer.ships">
-            <div class="ship" v-bind:class="{'destroyed': ship['hp'] <= 0}">
+            <div class="ship" v-bind:class="{'destroyed': ship['destroyed'] == true}">
               <span v-for="cell in getShipSize(ship)"></span>
             </div>
           </template>
         </div>
       </div>
     </div>
-    <div class="main-sheet">
+    <div class="main-sheet" v-bind:class="{'unactive': gameData.turnBy != gameData.myTag}">
       <template>
         <div class="enemy-sheet">
           <div class="sheet-row" v-for="(row, rI) in enemyPlayer.sheet">
             <div
               class="sheet-item"
-              v-bind:class="[item]"
+              v-bind:class="[calcEnemyItem(rI, cI, item)]"
               v-bind:style="{
                 'width': cellWidth + 'px',
                 'height': cellWidth + 'px'
@@ -86,6 +86,7 @@
     methods: {
       handleClick: function (rI, cI) {
         if (['dc', 'mc'].indexOf(this.enemyPlayer['sheet'][rI][cI]) !== -1) {
+          console.log('cancel mc')
           return
         }
         let gameId = this.$route.params['game_id']
@@ -104,25 +105,64 @@
         return arr
       },
       calcItem: function (rI, cI, item) {
-        if (item === 'dc') return item
-        if (this.checkShip(rI, cI)) {
+        if (item === 'dc') {
+          let checkShip = this.checkShip(this.myShips, rI, cI)
+          if (checkShip['hp'] <= 0) {
+            return 'dsc'
+          }
+          return item
+        }
+        let checkShip = this.checkShip(this.myShips, rI, cI)
+        if (checkShip) {
           return 'sc'
+        }
+        let checkBorder = this.checkBorder(this.myPlayer.destroyed_ships, rI, cI)
+        if (checkBorder) {
+          return 'mc'
         }
         return item
       },
-      checkShip: function (r, c) {
+      calcEnemyItem: function (rI, cI, item) {
+        let checkShip = this.checkShip(this.enemyPlayer.destroyed_ships, rI, cI)
+        if (checkShip) {
+          return 'dsc'
+        }
+        let checkBorder = this.checkBorder(this.enemyPlayer.destroyed_ships, rI, cI)
+        if (checkBorder) {
+          return 'mc'
+        }
+        return item
+      },
+      checkBorder: function (ships, r, c) {
         // Check ship exsisting in getted cell
         // x <= pX + wX
         // x >= pX
         // y <= pY + wY
         // y >= pY
-        for (let i = 0; i < this.myShips.length; i++) {
-          let ship = this.myShips[i]
+        for (let i = 0; i < ships.length; i++) {
+          let ship = ships[i]
+          if ((c <= ship.pX + ship.wX) &
+            (c >= ship.pX - 1) &
+            (r <= ship.pY + ship.wY) &
+            (r >= ship.pY - 1)) {
+            return ship
+          }
+        }
+        return null
+      },
+      checkShip: function (ships, r, c) {
+        // Check ship exsisting in getted cell
+        // x <= pX + wX
+        // x >= pX
+        // y <= pY + wY
+        // y >= pY
+        for (let i = 0; i < ships.length; i++) {
+          let ship = ships[i]
           if ((c <= ship.pX + ship.wX - 1) &
             (c >= ship.pX) &
             (r <= ship.pY + ship.wY - 1) &
             (r >= ship.pY)) {
-            return true
+            return ship
           }
         }
         return null
@@ -144,6 +184,9 @@
   .main-sheet {
     display: block;
     width: 100%;
+  }
+  .main-sheet.unactive {
+    opacity: 0.3;
   }
   .my-sheet.mini {
     float: right;

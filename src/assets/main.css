@@ -30,6 +30,13 @@ body {
   align-items: center;
   justify-content: center;
 }
+.menu-page.overflow {
+  top: 0;
+  left: 0;
+  position: fixed;
+  background: rgba(255, 255, 255, 0.7);
+}
+
 .menu-page .btn {
   margin-bottom: 20px;
 }
@@ -44,6 +51,7 @@ body {
   max-height:  20px;
   font-size: 16px;
   padding: 10px;
+  margin: 0 10px;
   border: 2px #000000 solid;
   border-radius: 5px;
 }
@@ -59,6 +67,7 @@ body {
 
 .btn {
   padding: 5px 6px;
+  margin: 0 5px;
   border: 2px #000 solid;
   background: #fff;
   font-size: 17px;
@@ -85,7 +94,9 @@ body {
 }
 
 .sheet-item {
-  display: block;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 30px;
   height: 30px;
   border: 1px #707070 solid;
@@ -101,9 +112,6 @@ body {
   background: #c5c5c5;
 }
 .sheet-item.mc {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   background: #d8d8d8;
 }
 .sheet-item.mc::after {
@@ -111,7 +119,21 @@ body {
   color: #8f8f8f;
 }
 .sheet-item.dc {
-  background: #b12c1f;
+  background: #b44b41;
+}
+.sheet-item.dc::after {
+  content: "🔥";
+  color: #b41b16;
+}
+.sheet-item.dsc {
+  background: #b41b16;
+}
+
+.my-sheet.mini .sheet-item::after {
+  font-size: 10px;
+}
+.sheet-item::after {
+  font-size: 20px;
 }
 
 .players-header {

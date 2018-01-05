@@ -113,9 +113,12 @@ class SeaBattleGame():
     pick_cell = _sheet[rI][cI]
     if pick_cell == 'sc':
       _ship, index = self.check_ship(self.secret_data[enemy_tag]['ships'], rI, cI)
-      ship = self.game_data[enemy_tag]['ships'][index]
+      ship = self.secret_data[enemy_tag]['ships'][index]
       ship['hp'] -= 1
-      self.game_data[enemy_tag]['ships'][index] = ship
+      if ship['hp'] <= 0:
+        self.game_data[enemy_tag]['ships'][index]['destroyed'] = True
+        self.game_data[enemy_tag]['destroyed_ships'].append(ship)
+      self.secret_data[enemy_tag]['ships'][index] = ship
       sheet[rI][cI] = 'dc'
       won = self.calc_win(enemy_tag)
       if won:
@@ -128,6 +131,7 @@ class SeaBattleGame():
       self.switch_player()
     self.game_data[enemy_tag]['sheet'] = sheet
     self.save_info()
+    self.save_secret()
     return True
 
   def setup_ships(self, ships):
@@ -149,6 +153,8 @@ class SeaBattleGame():
     for index, ship in enumerate(public_ships):
       ship.pop('pX', None)
       ship.pop('pY', None)
+      ship.pop('hp', None)
+      ship['destroyed'] = False
       if ship['wY'] > ship['wX']:
         tmp = ship['wX']
         ship['wX'] = ship['wY']
@@ -180,7 +186,7 @@ class SeaBattleGame():
 
   def calc_win(self, enemy_tag):
     allHp = 0
-    for ship in self.game_data[enemy_tag]['ships']:
+    for ship in self.secret_data[enemy_tag]['ships']:
       allHp += ship['hp']
     if allHp == 0:
       return True
@@ -233,13 +239,15 @@ class SeaBattleGame():
         "sheet": None,
         "ships": [],
         "username": self.secret_data['p1']['username'],
-        "ships_setted": False
+        "ships_setted": False,
+        'destroyed_ships': []
       },
       'p2': {
         "sheet": None,
         "ships": [],
         "username": self.secret_data['p2']['username'],
-        "ships_setted": False
+        "ships_setted": False,
+        'destroyed_ships': []
       }
     }
     new_secret_data = {
@@ -314,7 +322,8 @@ class SeaBattleGame():
       "sheet": None,
       "ships": [],
       "username": self.user['username'],
-      "ships_setted": False
+      "ships_setted": False,
+      'destroyed_ships': []
     }
     if not self.secret_data.get('p1', None):
       self.game_data['p1'] = payload
@@ -379,19 +388,20 @@ class SeaBattleGame():
         ['ec', 'ec', 'ec', 'ec', 'ec', 'ec', 'ec', 'ec', 'ec', 'ec']
       ],
       "ships": [
-        {'wX': 4, 'wY': 1, 'hp': 4},
-        {'wX': 3, 'wY': 1, 'hp': 3},
-        {'wX': 3, 'wY': 1, 'hp': 3},
-        {'wX': 2, 'wY': 1, 'hp': 2},
-        {'wX': 2, 'wY': 1, 'hp': 2},
-        {'wX': 2, 'wY': 1, 'hp': 2},
-        {'wX': 1, 'wY': 1, 'hp': 1},
-        {'wX': 1, 'wY': 1, 'hp': 1},
-        {'wX': 1, 'wY': 1, 'hp': 1},
-        {'wX': 1, 'wY': 1, 'hp': 1}
+        {'wX': 4, 'wY': 1, 'destroyed': False},
+        {'wX': 3, 'wY': 1, 'destroyed': False},
+        {'wX': 3, 'wY': 1, 'destroyed': False},
+        {'wX': 2, 'wY': 1, 'destroyed': False},
+        {'wX': 2, 'wY': 1, 'destroyed': False},
+        {'wX': 2, 'wY': 1, 'destroyed': False},
+        {'wX': 1, 'wY': 1, 'destroyed': False},
+        {'wX': 1, 'wY': 1, 'destroyed': False},
+        {'wX': 1, 'wY': 1, 'destroyed': False},
+        {'wX': 1, 'wY': 1, 'destroyed': False}
       ],
       "username": 'bot',
-      "ships_setted": True
+      "ships_setted": True,
+      'destroyed_ships': []
     }
     self.game_data['p2'] = payload
     self.game_data['with_bot'] = True

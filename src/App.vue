@@ -53,6 +53,7 @@
     max-width: 400px;
     left: 0;
     right: 0;
+    overflow: auto;
     margin: 0 auto;
   }
 </style>

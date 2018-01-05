@@ -117,6 +117,8 @@ def join_game():
 @socketio.on('JOIN_GAME')
 def socket_join_game(json):
   user = json['user']
+  if not json.get('game_id', None):
+    return
   game = SeaBattleGame(game_id=json['game_id'], user=user)
   player_tag = game.get_player_tag()
   if player_tag:

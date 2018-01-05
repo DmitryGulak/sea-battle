@@ -23,11 +23,11 @@
         </div>
       </template>
     </template>
-    <template v-if="gameStage == 'playing'">
+    <template v-if="gameStage == 'playing' || gameStage == 'win'">
       <playing-page></playing-page>
     </template>
     <template v-if="gameStage == 'win'">
-      <div class="menu-page">
+      <div class="menu-page overflow">
         <h1 class="big-title"> 🎉 {{gameData['winner']}} won! 🎉</h1>
         <button class="btn big success" @click="handleRenewGame()">⏮ Renew game ⏮</button>
       </div>
